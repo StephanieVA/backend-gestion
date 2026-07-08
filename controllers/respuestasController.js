@@ -12,25 +12,32 @@ exports.guardar = async (req, res) => {
       await db.query(
         `
 INSERT INTO respuestas(
-
-estudiante_id,
-seccion,
-categoria,
-actividad,
-dia,
-horas
-
+  estudiante_id,
+  name_estudiante,
+  seccion,
+  categoria,
+  actividad,
+  dia,
+  horas,
+  semestre
 )
-
 VALUES(
-
-?,?,?,?,?,?
-
+  ?,?,?,?,?,?,?,?
 )
-
 `,
 
-        [r.estudiante_id, r.seccion, r.categoria, r.actividad, r.dia, r.horas],
+        [
+          r.estudiante_id && Number(r.estudiante_id) !== 0
+            ? r.estudiante_id
+            : null,
+          r.name_estudiante || null,
+          r.seccion,
+          r.categoria,
+          r.actividad,
+          r.dia,
+          r.horas,
+          r.semestre || null,
+        ],
       );
     }
 

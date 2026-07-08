@@ -20,6 +20,8 @@ app.use("/api/respuestas", require("./routes/respuestas.routes"));
 
 app.use("/api/reportes", require("./routes/reportes.routes"));
 
+app.use("/api/cursos", require("./routes/cursos.routes"));
+
 app.listen(3000, () => {
   console.log("Servidor iniciado");
 });

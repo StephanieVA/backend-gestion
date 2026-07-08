@@ -4,8 +4,14 @@ const router = express.Router();
 
 const controller = require("../controllers/reportesController");
 
-// Reportes agregados (sumatorias por día)
-// Query: ciclo=II ciclo (opcional)
-router.get("/por-ciclo", controller.reportePorCiclo);
+const authAdmin = require("../middleware/authAdmin");
+
+// Reporte paginado: 1 estudiante por página (limit=1 desde el frontend)
+// Query: ciclo=I|II|III... (opcional), page, limit
+router.get("/por-ciclo", authAdmin, controller.reportePorCiclo);
+
+// Exportar Excel completo (no paginado)
+// Query: ciclo=I|II|III... (opcional)
+router.get("/exportar-excel", authAdmin, controller.exportarExcel);
 
 module.exports = router;
