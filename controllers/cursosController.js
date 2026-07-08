@@ -1,13 +1,17 @@
 const db = require("../config/db");
 
-// GET /api/cursos/by-ciclo?ciclo=I%20ciclo
-// Retorna: [{ id, nombre, ciclo }]
 exports.byCiclo = async (req, res) => {
   try {
+    console.log("Entró a byCiclo");
+
     const { ciclo } = req.query;
 
+    console.log("Ciclo recibido:", ciclo);
+
     if (!ciclo) {
-      return res.status(400).json({ mensaje: "Falta parametro ciclo" });
+      return res.status(400).json({
+        mensaje: "Falta parametro ciclo",
+      });
     }
 
     const sql = `
@@ -17,10 +21,21 @@ exports.byCiclo = async (req, res) => {
       ORDER BY id ASC
     `;
 
+    console.log("Ejecutando consulta");
+
     const [rows] = await db.query(sql, [ciclo]);
 
-    res.json({ ciclo, cursos: rows });
+    console.log("Resultado:", rows.length);
+
+    return res.json({
+      ciclo,
+      cursos: rows,
+    });
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.log("ERROR:", error);
+
+    return res.status(500).json({
+      mensaje: error.message,
+    });
   }
 };
