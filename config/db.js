@@ -24,13 +24,4 @@ const db = mysql.createPool({
   port: process.env.MYSQLPORT,
 });
 
-db.getConnection((err, connection) => {
-  if (err) {
-    console.log("❌ Error conexión MySQL:", err.message);
-  } else {
-    console.log("✅ MySQL conectado correctamente");
-    connection.release();
-  }
-});
-
 module.exports = db.promise();
