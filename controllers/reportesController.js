@@ -27,6 +27,219 @@ function reporteVacio() {
 // LISTADO PAGINADO DE ESTUDIANTES
 // =====================================================
 
+exports.reportePorCiclo = async (req, res) => {
+  try {
+    const ciclo = (req.query.ciclo || "").trim();
+
+    const pagina = Math.max(1, Number(req.query.page || 1));
+
+    const limite = Math.max(1, Number(req.query.limit || 10));
+
+    const offset = (pagina - 1) * limite;
+
+    // TOTAL ESTUDIANTES
+
+    let sqlTotal = `
+
+SELECT COUNT(*) total
+
+FROM (
+
+SELECT
+
+name_estudiante,
+semestre
+
+FROM respuestas
+
+
+${ciclo ? "WHERE semestre=?" : ""}
+
+
+GROUP BY
+
+name_estudiante,
+semestre
+
+
+)x
+
+`;
+
+    let paramsTotal = [];
+
+    if (ciclo) paramsTotal.push(ciclo);
+
+    const [[totalRow]] = await db.query(sqlTotal, paramsTotal);
+
+    const totalEstudiantes = Number(totalRow.total || 0);
+
+    const totalPaginas = Math.ceil(totalEstudiantes / limite) || 1;
+
+    // ESTUDIANTES
+
+    let sqlEstudiantes = `
+
+SELECT
+
+MAX(name_estudiante) nombres,
+
+semestre
+
+
+FROM respuestas
+
+
+${ciclo ? "WHERE semestre=?" : ""}
+
+
+GROUP BY
+
+name_estudiante,
+semestre
+
+
+ORDER BY nombres
+
+
+LIMIT ? OFFSET ?
+
+`;
+
+    let paramsEstudiantes = [];
+
+    if (ciclo) paramsEstudiantes.push(ciclo);
+
+    paramsEstudiantes.push(limite);
+
+    paramsEstudiantes.push(offset);
+
+    const [estudiantesRows] = await db.query(sqlEstudiantes, paramsEstudiantes);
+
+    // DATOS HORAS
+
+    let sqlHoras = `
+
+SELECT
+
+
+name_estudiante,
+
+semestre,
+
+dia,
+
+
+SUM(
+
+CASE
+
+WHEN seccion IN (1,2)
+
+THEN horas
+
+ELSE 0
+
+END
+
+) reporte1,
+
+
+SUM(
+
+CASE
+
+WHEN seccion IN (3,4,5)
+
+THEN horas
+
+ELSE 0
+
+END
+
+) reporte2,
+
+
+SUM(horas) reporteFinal
+
+
+
+FROM respuestas
+
+
+${ciclo ? "WHERE semestre=?" : ""}
+
+
+GROUP BY
+
+name_estudiante,
+
+semestre,
+
+dia
+
+
+`;
+
+    let paramsHoras = [];
+
+    if (ciclo) paramsHoras.push(ciclo);
+
+    const [rowsHoras] = await db.query(sqlHoras, paramsHoras);
+
+    const mapa = new Map();
+
+    estudiantesRows.forEach((e) => {
+      mapa.set(
+        `${e.nombres}-${e.semestre}`,
+
+        {
+          nombres: e.nombres,
+
+          semestre: e.semestre,
+
+          reporte1: reporteVacio(),
+
+          reporte2: reporteVacio(),
+
+          reporteFinal: reporteVacio(),
+        },
+      );
+    });
+
+    rowsHoras.forEach((r) => {
+      const est = mapa.get(`${r.name_estudiante}-${r.semestre}`);
+
+      if (!est) return;
+
+      if (!DIAS.includes(r.dia)) return;
+
+      est.reporte1[r.dia] += Number(r.reporte1) || 0;
+
+      est.reporte2[r.dia] += Number(r.reporte2) || 0;
+
+      est.reporteFinal[r.dia] += Number(r.reporteFinal) || 0;
+    });
+
+    res.json({
+      pagina,
+
+      totalPaginas,
+
+      totalEstudiantes,
+
+      estudiantes: Array.from(mapa.values()),
+
+      dias: DIAS,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      mensaje: error.message,
+    });
+  }
+};
 exports.exportarExcel = async (req, res) => {
 
 try {
