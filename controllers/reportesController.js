@@ -528,6 +528,52 @@ actividad
         key: "Total",
       },
     ];
+    // =====================
+// HOJA 3: DATOS COMPLETOS
+// =====================
+
+let sqlCompleto = `
+
+SELECT
+
+id,
+estudiante_id,
+name_estudiante,
+semestre,
+seccion,
+categoria,
+actividad,
+dia,
+horas
+
+FROM respuestas
+
+
+${ciclo ? "WHERE semestre=?" : ""}
+
+
+ORDER BY
+
+name_estudiante,
+seccion,
+actividad,
+dia
+
+
+`;
+
+
+let paramsCompleto = [];
+
+if(ciclo){
+  paramsCompleto.push(ciclo);
+}
+
+
+const [rowsCompleto] = await db.query(
+  sqlCompleto,
+  paramsCompleto
+);
 
     const mapaDetalle = new Map();
 
