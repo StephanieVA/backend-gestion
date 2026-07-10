@@ -14,4 +14,6 @@ router.get("/por-ciclo", authAdmin, controller.reportePorCiclo);
 // Query: ciclo=I|II|III... (opcional)
 router.get("/exportar-excel", authAdmin, controller.exportarExcel);
 
+router.get("/detalle", authAdmin, controller.detalleEstudiante);
+
 module.exports = router;
