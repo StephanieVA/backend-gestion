@@ -606,54 +606,57 @@ actividad
 // DETALLE PARA MODAL
 // =====================================================
 
-exports.detalleEstudiante = async (req, res) => {
-  try {
-    const { nombre, semestre } = req.query;
+exports.detalleEstudiante = async (req,res)=>{
 
-    const [rows] = await db.query(
-      `
+try{
 
+const nombre = req.query.nombre;
+const semestre = req.query.semestre;
+
+
+const [rows] = await db.query(
+`
 
 SELECT
 
 seccion,
-
+categoria,
 actividad,
-
 dia,
-
 horas
-
 
 FROM respuestas
 
+WHERE 
+name_estudiante = ?
 
-WHERE
-
-name_estudiante=?
-
-AND semestre=?
-
+AND semestre = ?
 
 ORDER BY
-
 seccion,
-
 actividad,
-
 dia
 
-
-
 `,
-      [nombre, semestre],
-    );
+[
+nombre,
+semestre
+]
+);
 
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({
-      mensaje: error.message,
-    });
-  }
+
+res.json(rows);
+
+
+}catch(error){
+
+console.log(error);
+
+res.status(500).json({
+mensaje:error.message
+});
+
+}
+
 };
 
