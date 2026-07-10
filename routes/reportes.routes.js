@@ -16,4 +16,10 @@ router.get("/exportar-excel", authAdmin, controller.exportarExcel);
 
 router.get("/detalle", authAdmin, controller.detalleEstudiante);
 
+router.get(
+  "/detalle-estudiante",
+  authAdmin,
+  controller.detalleEstudiante
+);
+
 module.exports = router;
