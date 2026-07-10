@@ -1,56 +1,95 @@
 const db = require("../config/db");
 
-exports.guardar = async (req, res) => {
-  try {
-    console.log("BODY RECIBIDO");
 
-    console.log(JSON.stringify(req.body, null, 2));
+exports.guardar = async (req, res) => {
+
+  try {
+
 
     const respuestas = req.body;
 
-    for (const r of respuestas) {
-      await db.query(
-        `
-INSERT INTO respuestas(
-  estudiante_id,
-  name_estudiante,
-  seccion,
-  categoria,
-  actividad,
-  dia,
-  horas,
-  semestre
+
+    console.log(
+      "Cantidad de respuestas recibidas:",
+      respuestas.length
+    );
+
+
+
+    const valores = respuestas.map((r)=>[
+
+      r.estudiante_id && Number(r.estudiante_id)!==0
+        ? r.estudiante_id
+        : null,
+
+      r.name_estudiante || null,
+
+      r.seccion,
+
+      r.categoria,
+
+      r.actividad,
+
+      r.dia,
+
+      r.horas,
+
+      r.semestre || null
+
+    ]);
+
+
+
+    await db.query(
+
+`
+INSERT INTO respuestas
+(
+ estudiante_id,
+ name_estudiante,
+ seccion,
+ categoria,
+ actividad,
+ dia,
+ horas,
+ semestre
 )
-VALUES(
-  ?,?,?,?,?,?,?,?
-)
+VALUES ?
+
 `,
 
-        [
-          r.estudiante_id && Number(r.estudiante_id) !== 0
-            ? r.estudiante_id
-            : null,
-          r.name_estudiante || null,
-          r.seccion,
-          r.categoria,
-          r.actividad,
-          r.dia,
-          r.horas,
-          r.semestre || null,
-        ],
-      );
-    }
+[valores]
+
+);
+
+
 
     res.json({
-      mensaje: "Guardado",
-    });
-  } catch (error) {
-    console.log("ERROR MYSQL");
 
-    console.log(error);
+      mensaje:"Guardado",
+
+      registros:respuestas.length
+
+    });
+
+
+
+  } catch(error){
+
+
+    console.log("ERROR MYSQL:");
+
+    console.log(error.message);
+
+
 
     res.status(500).json({
-      mensaje: error.message,
+
+      mensaje:error.message
+
     });
+
+
   }
+
 };
