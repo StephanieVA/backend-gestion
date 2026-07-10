@@ -53,15 +53,12 @@ semestre
     const totalEstudiantes = Number(totalRow.total || 0);
     const totalPaginas = Math.ceil(totalEstudiantes / limite) || 1;
     // ESTUDIANTES
-    let sqlEstudiantes = `
-SELECT
-MAX(name_estudiante) nombres,
+   let sqlEstudiantes = `
+SELECT DISTINCT
+TRIM(name_estudiante) AS nombres,
 semestre
 FROM respuestas
 ${ciclo ? "WHERE semestre=?" : ""}
-GROUP BY
-name_estudiante,
-semestre
 ORDER BY nombres
 LIMIT ? OFFSET ?
 `;
