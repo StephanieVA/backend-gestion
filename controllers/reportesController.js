@@ -37,14 +37,11 @@ exports.reportePorCiclo = async (req, res) => {
    let sqlTotal = `
 SELECT COUNT(*) total
 FROM (
-SELECT
-name_estudiante,
+SELECT DISTINCT
+TRIM(name_estudiante) AS nombre,
 semestre
 FROM respuestas
 ${ciclo ? "WHERE semestre=?" : ""}
-GROUP BY
-name_estudiante,
-semestre
 )x
 `;
     let paramsTotal = [];
