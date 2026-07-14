@@ -555,24 +555,16 @@ mensaje:error.message
 // =====================================================
 
 exports.validarRespuesta = async (req,res)=>{
-
 try{
-
 const {
 nombre,
 semestre
 }=req.body;
-
-
 // generar identificador único
-
 const encuesta_id =
 "ENC-" +
 Date.now();
-
-
 // actualizar respuestas
-
 await db.query(
 `
 UPDATE respuestas
@@ -590,28 +582,44 @@ nombre,
 semestre
 ]
 );
-
-
 res.json({
-
 mensaje:"Registro validado",
 encuesta_id
-
 });
-
-
 }
 catch(error){
-
 console.log(error);
-
 res.status(500).json({
-
 mensaje:error.message
-
 });
-
 }
 
+};
+// =====================================================
+// ELIMINAR REGISTRO COMPLETO
+// =====================================================
 
+exports.eliminarRespuesta = async(req,res)=>{
+try{
+const {
+encuesta_id
+}=req.body;
+await db.query(
+`
+DELETE FROM respuestas
+WHERE encuesta_id=?
+`,
+[
+encuesta_id
+]
+);
+res.json({
+mensaje:"Registro eliminado correctamente"
+});
+}catch(error){
+console.log(error);
+res.status(500).json({
+mensaje:error.message
+});
+}
 };
