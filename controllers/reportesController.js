@@ -56,7 +56,10 @@ ${ciclo ? "WHERE semestre=?" : ""}
    let sqlEstudiantes = `
 SELECT DISTINCT
 TRIM(name_estudiante) AS nombres,
-semestre
+semestre,
+estado,
+encuesta_id,
+dni
 FROM respuestas
 ${ciclo ? "WHERE semestre=?" : ""}
 ORDER BY nombres
@@ -72,6 +75,8 @@ LIMIT ? OFFSET ?
 SELECT
 name_estudiante,
 semestre,
+estado,
+encuesta_id,
 dia,
 SUM(
 CASE
@@ -93,6 +98,8 @@ ${ciclo ? "WHERE semestre=?" : ""}
 GROUP BY
 name_estudiante,
 semestre,
+estado,
+encuesta_id,
 dia
 `;
     let paramsHoras = [];
@@ -101,15 +108,18 @@ dia
     const mapa = new Map();
     estudiantesRows.forEach((e) => {
      mapa.set(
-        `${e.nombres}-${e.semestre}`,
-        {
-          nombres: e.nombres,
-          semestre: e.semestre,
-          reporte1: reporteVacio(),
-          reporte2: reporteVacio(),
-          reporteFinal: reporteVacio(),
-        },
-      );
+ `${e.nombres}-${e.semestre}`,
+ {
+   nombres: e.nombres,
+   semestre: e.semestre,
+   estado: e.estado || "PENDIENTE",
+   encuesta_id: e.encuesta_id || null,
+   dni: e.dni || null,
+   reporte1: reporteVacio(),
+   reporte2: reporteVacio(),
+   reporteFinal: reporteVacio(),
+ },
+);
     });
 
     rowsHoras.forEach((r) => {
@@ -152,6 +162,8 @@ ${ciclo ? "WHERE semestre=?" : ""}
 GROUP BY
 name_estudiante,
 semestre,
+estado,
+encuesta_id,
 dia
 ORDER BY name_estudiante
 `;
