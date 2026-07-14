@@ -514,41 +514,100 @@ mensaje:error.message
 };// =====================================================
 // DETALLE PARA MODAL
 // =====================================================
+// =====================================================
+// DETALLE PARA MODAL
+// =====================================================
+
 exports.detalleEstudiante = async (req,res)=>{
+
 try{
-const {encuesta_id}=req.query;
-const [rows]=await db.query(
-`
+
+
+const {
+nombre,
+semestre,
+encuesta_id
+}=req.query;
+
+
+
+let sql = `
+
 SELECT
+id,
 seccion,
 categoria,
 actividad,
 dia,
-SUM(horas) AS horas
+horas
+
 FROM respuestas
-WHERE encuesta_id=?
-GROUP BY
-seccion,
-categoria,
-actividad,
-dia
+
+WHERE 
+name_estudiante=?
+AND semestre=?
+
+`;
+
+
+let params=[
+nombre,
+semestre
+];
+
+
+
+if(encuesta_id){
+
+sql += `
+AND encuesta_id=?
+`;
+
+params.push(encuesta_id);
+
+}
+
+
+
+sql += `
+
 ORDER BY
 seccion,
 actividad,
 dia
-`,
-[
-nombre,
-semestre
-]
+
+`;
+
+
+
+const [rows]=await db.query(
+sql,
+params
 );
+
+
+
 res.json(rows);
+
+
+
 }catch(error){
-console.log(error);
+
+
+console.log("ERROR DETALLE:");
+console.log(error.message);
+
+
 res.status(500).json({
+
 mensaje:error.message
+
 });
+
+
 }
+
+
 };
 // =====================================================
 // VALIDAR RESPUESTAS DE ESTUDIANTE
