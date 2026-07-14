@@ -77,6 +77,7 @@ name_estudiante,
 semestre,
 estado,
 encuesta_id,
+dni,
 dia,
 SUM(
 CASE
@@ -108,7 +109,7 @@ dia
     const mapa = new Map();
     estudiantesRows.forEach((e) => {
      mapa.set(
- `${e.nombres}-${e.semestre}`,
+ `${e.nombres}-${e.semestre}-${e.encuesta_id || 'SIN_ID'}`,
  {
    nombres: e.nombres,
    semestre: e.semestre,
@@ -123,7 +124,9 @@ dia
     });
 
     rowsHoras.forEach((r) => {
-      const est = mapa.get(`${r.name_estudiante}-${r.semestre}`);
+      const est = mapa.get(
+ `${r.name_estudiante}-${r.semestre}-${r.encuesta_id || 'SIN_ID'}`
+);
       if (!est) return;
       if (!DIAS.includes(r.dia)) return;
       est.reporte1[r.dia] += Number(r.reporte1) || 0;
@@ -155,6 +158,8 @@ let sqlResumen = `
 SELECT
 name_estudiante nombres,
 semestre,
+estado,
+encuesta_id,
 dia,
 SUM(horas) totalHoras
 FROM respuestas
