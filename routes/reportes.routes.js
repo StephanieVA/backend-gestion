@@ -20,5 +20,9 @@ router.get(
   "/detalle-estudiante",
   controller.detalleEstudiante
 );
+router.post(
+"/validar",
+reportesController.validarRespuesta
+);
 
 module.exports = router;
