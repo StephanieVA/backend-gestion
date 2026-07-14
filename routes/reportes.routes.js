@@ -28,4 +28,9 @@ router.delete(
 "/eliminar",
 controller.eliminarRespuesta
 );
+
+router.put(
+'/validar-estudiante',
+controller.validarEstudiante
+);
 module.exports = router;
