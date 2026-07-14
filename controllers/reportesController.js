@@ -320,7 +320,7 @@ key:"Total"
 const mapaResumen = new Map();
 rowsResumen.forEach(r=>{
 const key =
-`${r.nombres}-${r.semestre}`;
+`${r.nombres}-${r.semestre}-${r.encuesta_id || 'SIN_ID'}`;
 if(!mapaResumen.has(key)){
 mapaResumen.set(key,{
 estudiante:r.nombres,
