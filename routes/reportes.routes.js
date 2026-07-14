@@ -24,5 +24,8 @@ router.post(
 "/validar",
 controller.validarRespuesta
 );
-
+router.delete(
+"/eliminar",
+controller.eliminarRespuesta
+);
 module.exports = router;
