@@ -623,3 +623,42 @@ mensaje:error.message
 });
 }
 };
+// =====================================================
+// VALIDAR ESTUDIANTE
+// =====================================================
+
+exports.validarEstudiante = async (req,res)=>{
+
+try{
+const {nombre, semestre}=req.body;
+// generar un identificador único
+const encuesta_id = Date.now();
+// actualizar todas las respuestas del estudiante
+await db.query(
+`
+UPDATE respuestas
+SET 
+encuesta_id=?,
+estado='VALIDADO'
+WHERE 
+name_estudiante=?
+AND semestre=?
+`,
+[
+encuesta_id,
+nombre,
+semestre
+]
+);
+res.json({
+mensaje:"Estudiante validado",
+encuesta_id
+});
+}catch(error){
+console.log(error);
+res.status(500).json({
+mensaje:error.message
+});
+}
+};
+
