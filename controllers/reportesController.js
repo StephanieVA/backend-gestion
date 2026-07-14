@@ -277,6 +277,11 @@ header:"Encuesta ID",
 key:"encuesta_id",
 width:20
 },
+  {
+header:"DNI",
+key:"dni",
+width:15
+},
 
 {
 header:"Lunes",
@@ -511,7 +516,7 @@ mensaje:error.message
 // =====================================================
 exports.detalleEstudiante = async (req,res)=>{
 try{
-const {nombre, semestre}=req.query;
+const {encuesta_id}=req.query;
 const [rows]=await db.query(
 `
 SELECT
@@ -521,9 +526,7 @@ actividad,
 dia,
 SUM(horas) AS horas
 FROM respuestas
-WHERE 
-name_estudiante=?
-AND semestre=?
+WHERE encuesta_id=?
 GROUP BY
 seccion,
 categoria,
