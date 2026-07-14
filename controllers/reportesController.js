@@ -550,3 +550,68 @@ mensaje:error.message
 });
 }
 };
+// =====================================================
+// VALIDAR RESPUESTAS DE ESTUDIANTE
+// =====================================================
+
+exports.validarRespuesta = async (req,res)=>{
+
+try{
+
+const {
+nombre,
+semestre
+}=req.body;
+
+
+// generar identificador único
+
+const encuesta_id =
+"ENC-" +
+Date.now();
+
+
+// actualizar respuestas
+
+await db.query(
+`
+UPDATE respuestas
+SET
+encuesta_id=?,
+estado='VALIDADO'
+WHERE
+name_estudiante=?
+AND semestre=?
+AND estado='PENDIENTE'
+`,
+[
+encuesta_id,
+nombre,
+semestre
+]
+);
+
+
+res.json({
+
+mensaje:"Registro validado",
+encuesta_id
+
+});
+
+
+}
+catch(error){
+
+console.log(error);
+
+res.status(500).json({
+
+mensaje:error.message
+
+});
+
+}
+
+
+};
