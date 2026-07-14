@@ -693,4 +693,35 @@ mensaje:error.message
 });
 }
 };
+// =====================================================
+// EDITAR DATOS DEL ESTUDIANTE
+// =====================================================
 
+exports.editarEstudiante = async(req,res)=>{
+try{
+const {
+encuesta_id,
+dni
+}=req.body;
+await db.query(
+`
+UPDATE respuestas
+SET dni=?
+WHERE encuesta_id=?
+`,
+[
+dni,
+encuesta_id
+]
+);
+res.json({
+mensaje:"Datos actualizados"
+});
+}catch(error){
+console.log(error);
+res.status(500).json({
+mensaje:error.message
+
+});
+}
+};
