@@ -264,6 +264,17 @@ header:"Semestre",
 key:"semestre",
 width:12
 },
+  {
+header:"Estado",
+key:"estado",
+width:15
+},
+
+{
+header:"Encuesta ID",
+key:"encuesta_id",
+width:20
+},
 
 {
 header:"Lunes",
@@ -314,6 +325,8 @@ if(!mapaResumen.has(key)){
 mapaResumen.set(key,{
 estudiante:r.nombres,
 semestre:r.semestre,
+estado:r.estado,
+encuesta_id:r.encuesta_id,
 Lunes:0,
 Martes:0,
 Miércoles:0,
