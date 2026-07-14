@@ -160,6 +160,7 @@ name_estudiante nombres,
 semestre,
 estado,
 encuesta_id,
+dni,
 dia,
 SUM(horas) totalHoras
 FROM respuestas
