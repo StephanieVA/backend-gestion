@@ -22,7 +22,7 @@ router.get(
 );
 router.post(
 "/validar",
-reportesController.validarRespuesta
+controller.validarRespuesta
 );
 
 module.exports = router;
