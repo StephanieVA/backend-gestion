@@ -101,6 +101,7 @@ name_estudiante,
 semestre,
 estado,
 encuesta_id,
+dni,
 dia
 `;
     let paramsHoras = [];
@@ -170,6 +171,7 @@ name_estudiante,
 semestre,
 estado,
 encuesta_id,
+dni,
 dia
 ORDER BY name_estudiante
 `;
