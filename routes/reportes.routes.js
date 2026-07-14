@@ -33,4 +33,9 @@ router.put(
 '/validar-estudiante',
 controller.validarEstudiante
 );
+
+router.put(
+'/editar-estudiante',
+controller.editarEstudiante
+);
 module.exports = router;
