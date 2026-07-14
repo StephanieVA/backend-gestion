@@ -39,7 +39,10 @@ SELECT COUNT(*) total
 FROM (
 SELECT DISTINCT
 TRIM(name_estudiante) AS nombre,
-semestre
+semestre,
+estado,
+encuesta_id,
+dni
 FROM respuestas
 ${ciclo ? "WHERE semestre=?" : ""}
 )x
