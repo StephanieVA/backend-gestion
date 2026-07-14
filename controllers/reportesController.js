@@ -548,58 +548,31 @@ name_estudiante=?
 AND semestre=?
 
 `;
-
-
 let params=[
 nombre,
 semestre
 ];
-
-
-
-if(encuesta_id){
-
+if(encuesta_id && encuesta_id !== "null"){
 sql += `
 AND encuesta_id=?
 `;
-
 params.push(encuesta_id);
-
 }
-
-
-
 sql += `
-
 ORDER BY
 seccion,
 actividad,
 dia
-
 `;
-
-
-
 const [rows]=await db.query(
 sql,
 params
 );
-
-
-
 res.json(rows);
-
-
-
 }catch(error){
-
-
 console.log("ERROR DETALLE:");
 console.log(error.message);
-
-
 res.status(500).json({
-
 mensaje:error.message
 
 });
