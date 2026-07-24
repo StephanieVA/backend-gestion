@@ -1,8 +1,11 @@
 const db = require("../config/db");
 
 // Validar DNI
-exports.validarDni = async (req, res) => {
-
+exports.validarDni = (req, res) => {
+    res.json({
+        mensaje: "Ruta funcionando",
+        dni: req.params.dni
+    });
 };
 
 // Obtener cursos
