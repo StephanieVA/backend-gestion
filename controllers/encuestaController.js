@@ -57,7 +57,6 @@ exports.obtenerCursos = async (req, res) => {
 exports.registrarEncuesta = async (req, res) => {
 
 };
-const db = require("../config/db");
 
 
 exports.guardarEncuesta = async (req, res) => {
