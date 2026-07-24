@@ -12,4 +12,6 @@ router.get("/cursos/:semestre", encuestaController.obtenerCursos);
 // Registrar encuesta completa
 router.post("/registrar", encuestaController.registrarEncuesta);
 
+router.post("/guardar", encuestaController.guardarEncuesta);
+
 module.exports = router;
