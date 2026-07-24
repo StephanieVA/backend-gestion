@@ -2,21 +2,32 @@ const db = require("../config/db");
 
 // Validar DNI
 exports.validarDni = async (req, res) => {
-
-    console.log("Entró a validar DNI");
-
+  try {
     const { dni } = req.params;
 
-    console.log("DNI:", dni);
-
     const [rows] = await db.query(
-        "SELECT * FROM estudiantes_encuesta WHERE dni=?",
-        [dni]
+      "SELECT dni FROM estudiantes_encuesta WHERE dni = ?",
+      [dni]
     );
 
-    console.log(rows);
+    if (rows.length > 0) {
+      return res.json({
+        existe: true,
+        mensaje: "El DNI ya se encuentra registrado."
+      });
+    }
 
-    res.json(rows);
+    return res.json({
+      existe: false,
+      mensaje: "DNI disponible."
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Error al validar el DNI."
+    });
+  }
 };
 
 // Obtener cursos
