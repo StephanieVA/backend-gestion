@@ -32,7 +32,25 @@ exports.validarDni = async (req, res) => {
 
 // Obtener cursos
 exports.obtenerCursos = async (req, res) => {
+  try {
+    const { semestre } = req.params;
 
+    const [rows] = await db.query(
+      `SELECT id, nombre
+       FROM cursos
+       WHERE ciclo = ?
+       ORDER BY id`,
+      [semestre]
+    );
+
+    res.json(rows);
+
+  } catch (error) {
+    console.error("Error al obtener cursos:", error);
+    res.status(500).json({
+      mensaje: "Error al obtener los cursos."
+    });
+  }
 };
 
 // Registrar encuesta
