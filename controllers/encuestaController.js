@@ -1,4 +1,4 @@
-cconst db = require("../config/db");
+const db = require("../config/db");
 const ExcelJS = require("exceljs");
 
 // Validar DNI
