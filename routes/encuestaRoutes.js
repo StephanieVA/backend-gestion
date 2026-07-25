@@ -14,4 +14,6 @@ router.post("/registrar", encuestaController.registrarEncuesta);
 
 router.post("/guardar", encuestaController.guardarEncuesta);
 
+router.get("/exportar-excel",encuestaController.exportarExcel);
+
 module.exports = router;
